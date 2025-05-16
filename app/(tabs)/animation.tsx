@@ -1,36 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Dimensions, View } from 'react-native';
 import Animated, {
     useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming
+    useSharedValue
 } from 'react-native-reanimated';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
 
+const MARBLE_SIZE = 20;
+const GRAVITY = 0.5;
+const BOUNCE_FACTOR = 0.7;
+const FRICTION = 0.98;
+
 const Marble = ({ color, delay }: {color: string; delay: number}) => {
-  const translateX = useSharedValue(width / 2);
-  const translateY = useSharedValue(height / 2);
+  const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
+  const translateY = useSharedValue(-MARBLE_SIZE);
+  const velocityY = useSharedValue(0);
+  const velocityX = useSharedValue((Math.random() - 0.5) * 10);
 
-  // Animate X
-  React.useEffect(() => {
-    translateX.value = withRepeat(
-      withTiming(width - 100, { duration: 2000 }),
-      -1,
-      true,
-    );
-  }, []);
+  useEffect(() => {
+    const animate = () => {
+      velocityY.value += GRAVITY;
+      translateY.value += velocityY.value;
+      translateX.value += velocityX.value;
 
-  // Animate Y
-  React.useEffect(() => {
-    translateY.value = withRepeat(
-      withTiming(height - 200, { duration: 1500 }),
-      -1,
-      true,
-    );
+      // Bottom collision
+      if (translateY.value > height - MARBLE_SIZE) {
+        translateY.value = height - MARBLE_SIZE;
+        velocityY.value *= -BOUNCE_FACTOR;
+        velocityX.value *= FRICTION;
+      }
+
+      // Side collisions
+      if (translateX.value < 0 || translateX.value > width - MARBLE_SIZE) {
+        velocityX.value *= -BOUNCE_FACTOR;
+        translateX.value = Math.max(0, Math.min(translateX.value, width - MARBLE_SIZE));
+      }
+
+      requestAnimationFrame(animate);
+    };
+
+    setTimeout(() => {
+      animate();
+    }, delay);
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -42,20 +56,20 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
 
   return (
     <Animated.View style={[{ position: 'absolute' }, animatedStyle]}>
-          <Svg
-            pointerEvents="none"
-            width={width}
-            height={width}
-          >
-            <Rough.Circle
-              x={40}
-              y={40}
-              diameter={20}
-              fillWeight={3}
-              stroke={color}
-              fill={color}
-            />
-          </Svg>
+      <Svg
+        pointerEvents="none"
+        width={MARBLE_SIZE * 2}
+        height={MARBLE_SIZE * 2}
+      >
+        <Rough.Circle
+          x={MARBLE_SIZE}
+          y={MARBLE_SIZE}
+          diameter={MARBLE_SIZE}
+          fillWeight={3}
+          stroke={color}
+          fill={color}
+        />
+      </Svg>
     </Animated.View>
   );
 };
@@ -69,4 +83,3 @@ export default function App() {
     </View>
   );
 }
-
