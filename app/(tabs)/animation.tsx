@@ -13,6 +13,7 @@ const MARBLE_SIZE = 20;
 const GRAVITY = 0.5;
 const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
+const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
 
 const Marble = ({ color, delay }: {color: string; delay: number}) => {
   const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
@@ -27,8 +28,8 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
       translateX.value += velocityX.value;
 
       // Bottom collision
-      if (translateY.value > height - MARBLE_SIZE) {
-        translateY.value = height - MARBLE_SIZE;
+      if (translateY.value > height - NAV_SIZE - MARBLE_SIZE) {
+        translateY.value = height - NAV_SIZE - MARBLE_SIZE;
         velocityY.value *= -BOUNCE_FACTOR;
         velocityX.value *= FRICTION;
       }
