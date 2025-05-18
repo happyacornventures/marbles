@@ -20,6 +20,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
   const translateY = useSharedValue(-MARBLE_SIZE);
   const velocityY = useSharedValue(0);
   const velocityX = useSharedValue((Math.random() - 0.5) * 10);
+  const rotation = useSharedValue(0);
 
   useEffect(() => {
     const animate = () => {
@@ -32,6 +33,9 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
         translateY.value = height - NAV_SIZE - MARBLE_SIZE;
         velocityY.value *= -BOUNCE_FACTOR;
         velocityX.value *= FRICTION;
+
+        // Update rotation when on the ground
+        rotation.value += (velocityX.value / MARBLE_SIZE) * 360;
       }
 
       // Side collisions
@@ -52,6 +56,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
+      { rotate: `${rotation.value}deg` },
     ],
   }));
 
