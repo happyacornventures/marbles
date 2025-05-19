@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Dimensions, View } from 'react-native';
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue
+  useAnimatedStyle,
+  useSharedValue
 } from 'react-native-reanimated';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
 
-const MARBLE_SIZE = 20;
+const MARBLE_SIZE = 40;
 const GRAVITY = 0.5;
 const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
@@ -71,7 +71,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
           x={MARBLE_SIZE}
           y={MARBLE_SIZE}
           diameter={MARBLE_SIZE}
-          fillWeight={3}
+          fillWeight={1}
           stroke={color}
           fill={color}
         />
