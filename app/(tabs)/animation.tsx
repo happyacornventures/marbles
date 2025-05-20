@@ -27,6 +27,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
       velocityY.value += GRAVITY;
       translateY.value += velocityY.value;
       translateX.value += velocityX.value;
+      rotation.value += (velocityX.value * 3);
 
       // Bottom collision
       if (translateY.value > height - NAV_SIZE - MARBLE_SIZE) {
@@ -35,7 +36,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
         velocityX.value *= FRICTION;
 
         // Update rotation when on the ground
-        rotation.value += (velocityX.value / MARBLE_SIZE) * 360;
+        // rotation.value += (velocityX.value * 3);
       }
 
       // Side collisions
