@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -103,6 +103,12 @@ const StaticMarble = ({ color, onPress }: { color: string; onPress: () => void }
 };
 
 export default function App() {
+  const [marbles, setMarbles] = useState<Record<string, unknown>[]>([
+    { color: 'red', delay: 0 },
+    { color: 'blue', delay: 500 },
+    { color: 'green', delay: 1000 }
+  ]);
+
   const handleRedPress = () => {
     console.log("Red marble pressed");
     // Add your logic here
@@ -126,9 +132,9 @@ export default function App() {
       }}>
         <StaticMarble color="purple" onPress={handleGreenPress} />
       </View>
-      <Marble color="red" delay={0} />
-      <Marble color="blue" delay={500} />
-      <Marble color="green" delay={1000} />
+      {marbles.map((marble, index) => (
+        <Marble key={index} color={String(marble?.color) ?? "purple"} delay={Number(marble?.delay) ?? 0} />
+      ))}
     </View>
   );
 }
