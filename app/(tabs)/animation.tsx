@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue
@@ -81,9 +81,51 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
   );
 };
 
+const StaticMarble = ({ color, onPress }: { color: string; onPress: () => void }) => {
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <Svg
+        pointerEvents="none"
+        width={MARBLE_SIZE * 2}
+        height={MARBLE_SIZE * 2}
+      >
+        <Rough.Circle
+          x={MARBLE_SIZE}
+          y={MARBLE_SIZE}
+          diameter={MARBLE_SIZE}
+          fillWeight={1}
+          stroke={color}
+          fill={color}
+        />
+      </Svg>
+    </TouchableOpacity>
+  );
+};
+
 export default function App() {
+  const handleRedPress = () => {
+    console.log("Red marble pressed");
+    // Add your logic here
+  };
+
+  const handleGreenPress = () => {
+    console.log("Green marble pressed");
+    // Add your logic here
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={{
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        zIndex: 1,
+      }}>
+        <StaticMarble color="purple" onPress={handleGreenPress} />
+      </View>
       <Marble color="red" delay={0} />
       <Marble color="blue" delay={500} />
       <Marble color="green" delay={1000} />
