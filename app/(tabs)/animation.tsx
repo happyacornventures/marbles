@@ -116,7 +116,17 @@ export default function App() {
 
   const handleGreenPress = () => {
     console.log("Green marble pressed");
-    // Add your logic here
+    addNewMarble();
+  };
+
+  const addNewMarble = () => {
+    // const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+    // const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const newMarble = {
+      color: "purple",
+      delay: 0
+    };
+    setMarbles(prevMarbles => [...prevMarbles, newMarble]);
   };
 
   return (
