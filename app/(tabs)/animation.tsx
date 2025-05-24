@@ -103,11 +103,7 @@ const StaticMarble = ({ color, onPress }: { color: string; onPress: () => void }
 };
 
 export default function App() {
-  const [marbles, setMarbles] = useState<Record<string, unknown>[]>([
-    { color: 'red', delay: 0 },
-    { color: 'blue', delay: 500 },
-    { color: 'green', delay: 1000 }
-  ]);
+  const [marbles, setMarbles] = useState<Record<string, unknown>[]>([]);
 
   const handleRedPress = () => {
     console.log("Red marble pressed");
