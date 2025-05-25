@@ -15,6 +15,23 @@ const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
 const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
 
+const BaseMarble = ({ color }: { color: string }) => (
+  <Svg
+    pointerEvents="none"
+    width={MARBLE_SIZE * 2}
+    height={MARBLE_SIZE * 2}
+  >
+    <Rough.Circle
+      x={MARBLE_SIZE}
+      y={MARBLE_SIZE}
+      diameter={MARBLE_SIZE}
+      fillWeight={1}
+      stroke={color}
+      fill={color}
+    />
+  </Svg>
+)
+
 const Marble = ({ color, delay }: {color: string; delay: number}) => {
   const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
   const translateY = useSharedValue(-MARBLE_SIZE);
@@ -63,42 +80,8 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
 
   return (
     <Animated.View style={[{ position: 'absolute' }, animatedStyle]}>
-      <Svg
-        pointerEvents="none"
-        width={MARBLE_SIZE * 2}
-        height={MARBLE_SIZE * 2}
-      >
-        <Rough.Circle
-          x={MARBLE_SIZE}
-          y={MARBLE_SIZE}
-          diameter={MARBLE_SIZE}
-          fillWeight={1}
-          stroke={color}
-          fill={color}
-        />
-      </Svg>
+      <BaseMarble color={color} />
     </Animated.View>
-  );
-};
-
-const StaticMarble = ({ color, onPress }: { color: string; onPress: () => void }) => {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <Svg
-        pointerEvents="none"
-        width={MARBLE_SIZE * 2}
-        height={MARBLE_SIZE * 2}
-      >
-        <Rough.Circle
-          x={MARBLE_SIZE}
-          y={MARBLE_SIZE}
-          diameter={MARBLE_SIZE}
-          fillWeight={1}
-          stroke={color}
-          fill={color}
-        />
-      </Svg>
-    </TouchableOpacity>
   );
 };
 
@@ -136,7 +119,9 @@ export default function App() {
         right: 0,
         zIndex: 1,
       }}>
-        <StaticMarble color="purple" onPress={handleGreenPress} />
+        <TouchableOpacity onPress={handleGreenPress}>
+          <BaseMarble color={"purple"} />
+        </TouchableOpacity>
       </View>
       {marbles.map((marble, index) => (
         <Marble key={index} color={String(marble?.color) ?? "purple"} delay={Number(marble?.delay) ?? 0} />
