@@ -32,6 +32,17 @@ const BaseMarble = ({ color }: { color: string }) => (
   </Svg>
 )
 
+export const AnimatedMarble = ({ translateX, translateY }: { translateX: number; translateY: number; }) => {
+  return (
+    <Animated.View
+      style={{
+        transform: [{ translateX }, { translateY }],
+        position: "absolute"
+      }}
+    ><BaseMarble color="purple" /></Animated.View>
+  );
+};
+
 const Marble = ({ color, delay }: {color: string; delay: number}) => {
   const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
   const translateY = useSharedValue(-MARBLE_SIZE);
