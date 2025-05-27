@@ -96,6 +96,17 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
   );
 };
 
+// function that generates a marble with relevant shared properties
+const useCreateSharedMarble = (color: string) => {
+  const x = useSharedValue(Math.random() * (width - MARBLE_SIZE));
+  const y = useSharedValue(-MARBLE_SIZE);
+  const vx = useSharedValue((Math.random() - 0.5) * 10);
+  const vy = useSharedValue(0);
+  const rotation = useSharedValue(0);
+
+  return () => ({ color, x, y, vx, vy, rotation });
+};
+
 export default function App() {
   const [marbles, setMarbles] = useState<Record<string, unknown>[]>([]);
 
