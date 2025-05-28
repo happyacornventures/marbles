@@ -15,7 +15,7 @@ const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
 const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
 
-const BaseMarble = ({ color }: { color: string }) => (
+const RoughMarble = ({ color }: { color: string }) => (
   <Svg
     pointerEvents="none"
     width={MARBLE_SIZE * 2}
@@ -32,18 +32,7 @@ const BaseMarble = ({ color }: { color: string }) => (
   </Svg>
 )
 
-export const AnimatedMarble = ({ translateX, translateY }: { translateX: number; translateY: number; }) => {
-  return (
-    <Animated.View
-      style={{
-        transform: [{ translateX }, { translateY }],
-        position: "absolute"
-      }}
-    ><BaseMarble color="purple" /></Animated.View>
-  );
-};
-
-const Marble = ({ color, delay }: {color: string; delay: number}) => {
+const Marble = ({ color, delay}: Record<string, unknown>) => {
   const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
   const translateY = useSharedValue(-MARBLE_SIZE);
   const velocityY = useSharedValue(0);
@@ -78,7 +67,7 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
 
     setTimeout(() => {
       animate();
-    }, delay);
+    }, Number(delay));
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -91,20 +80,9 @@ const Marble = ({ color, delay }: {color: string; delay: number}) => {
 
   return (
     <Animated.View style={[{ position: 'absolute' }, animatedStyle]}>
-      <BaseMarble color={color} />
+      <RoughMarble color={String(color)} />
     </Animated.View>
   );
-};
-
-// function that generates a marble with relevant shared properties
-const useCreateSharedMarble = (color: string) => {
-  const x = useSharedValue(Math.random() * (width - MARBLE_SIZE));
-  const y = useSharedValue(-MARBLE_SIZE);
-  const vx = useSharedValue((Math.random() - 0.5) * 10);
-  const vy = useSharedValue(0);
-  const rotation = useSharedValue(0);
-
-  return () => ({ color, x, y, vx, vy, rotation });
 };
 
 export default function App() {
@@ -142,7 +120,7 @@ export default function App() {
         zIndex: 1,
       }}>
         <TouchableOpacity onPress={handleGreenPress}>
-          <BaseMarble color={"purple"} />
+          <RoughMarble color={"purple"} />
         </TouchableOpacity>
       </View>
       {marbles.map((marble, index) => (
