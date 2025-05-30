@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
+  SharedValue,
   useAnimatedStyle,
   useSharedValue
 } from 'react-native-reanimated';
@@ -14,6 +15,29 @@ const GRAVITY = 0.5;
 const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
 const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
+
+const prepAnimate = (translateX: SharedValue<number>, translateY: SharedValue<number>, velocityX: SharedValue<number>, velocityY: SharedValue<number>, rotation: SharedValue<number>) => () => {
+  velocityY.value += GRAVITY;
+  translateY.value += velocityY.value;
+  translateX.value += velocityX.value;
+  rotation.value += (velocityX.value * 3);
+
+  // Bottom collision
+  if (translateY.value > height - NAV_SIZE - MARBLE_SIZE) {
+    translateY.value = height - NAV_SIZE - MARBLE_SIZE;
+    velocityY.value *= -BOUNCE_FACTOR;
+    velocityX.value *= FRICTION;
+
+    // Update rotation when on the ground
+    // rotation.value += (velocityX.value * 3);
+  }
+
+  // Side collisions
+  if (translateX.value < 0 || translateX.value > width - MARBLE_SIZE) {
+    velocityX.value *= -BOUNCE_FACTOR;
+    translateX.value = Math.max(0, Math.min(translateX.value, width - MARBLE_SIZE));
+  }
+};
 
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
