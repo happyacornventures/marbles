@@ -64,33 +64,15 @@ const Marble = ({ color, delay}: Record<string, unknown>) => {
   const rotation = useSharedValue(0);
 
   useEffect(() => {
-    const animate = () => {
-      velocityY.value += GRAVITY;
-      translateY.value += velocityY.value;
-      translateX.value += velocityX.value;
-      rotation.value += (velocityX.value * 3);
+    const animate = prepAnimate(translateX, translateY, velocityX, velocityY, rotation);
 
-      // Bottom collision
-      if (translateY.value > height - NAV_SIZE - MARBLE_SIZE) {
-        translateY.value = height - NAV_SIZE - MARBLE_SIZE;
-        velocityY.value *= -BOUNCE_FACTOR;
-        velocityX.value *= FRICTION;
-
-        // Update rotation when on the ground
-        // rotation.value += (velocityX.value * 3);
-      }
-
-      // Side collisions
-      if (translateX.value < 0 || translateX.value > width - MARBLE_SIZE) {
-        velocityX.value *= -BOUNCE_FACTOR;
-        translateX.value = Math.max(0, Math.min(translateX.value, width - MARBLE_SIZE));
-      }
-
-      requestAnimationFrame(animate);
+    const animateLoop = () => {
+      animate();
+      requestAnimationFrame(animateLoop);
     };
 
     setTimeout(() => {
-      animate();
+      animateLoop();
     }, Number(delay));
   }, []);
 
