@@ -67,11 +67,7 @@ const useMarble = () => {
 };
 
 const Marble = ({ color, delay}: Record<string, unknown>) => {
-  const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
-  const translateY = useSharedValue(-MARBLE_SIZE);
-  const velocityY = useSharedValue(0);
-  const velocityX = useSharedValue((Math.random() - 0.5) * 10);
-  const rotation = useSharedValue(0);
+  const { translateX, translateY, velocityY, velocityX, rotation } = useMarble();
 
   useEffect(() => {
     const animate = prepAnimate(translateX, translateY, velocityX, velocityY, rotation);
