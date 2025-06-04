@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
+  makeMutable,
   SharedValue,
   useAnimatedStyle,
   useSharedValue
@@ -66,11 +67,10 @@ const useMarble = () => {
   return { translateX, translateY, velocityY, velocityX, rotation };
 };
 
-const Marble = ({ color, delay}: Record<string, unknown>) => {
-  const { translateX, translateY, velocityY, velocityX, rotation } = useMarble();
+const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation }: Record<string, unknown>) => {
 
   useEffect(() => {
-    const animate = prepAnimate(translateX, translateY, velocityX, velocityY, rotation);
+    const animate = prepAnimate(translateX as Animated.SharedValue<number>, translateY as Animated.SharedValue<number>, velocityX as Animated.SharedValue<number>, velocityY as Animated.SharedValue<number>, rotation as Animated.SharedValue<number>);
 
     const animateLoop = () => {
       animate();
@@ -84,9 +84,9 @@ const Marble = ({ color, delay}: Record<string, unknown>) => {
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-      { rotate: `${rotation.value}deg` },
+      { translateX: (translateX as SharedValue<number>).value },
+      { translateY: (translateY as SharedValue<number>).value },
+      { rotate: `${(rotation as SharedValue<number>).value}deg` },
     ],
   }));
 
@@ -115,7 +115,12 @@ export default function App() {
     // const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const newMarble = {
       color: "purple",
-      delay: 0
+      delay: 0,
+      translateX: makeMutable(Math.random() * (width - MARBLE_SIZE)),
+      translateY: makeMutable(-MARBLE_SIZE),
+      velocityY: makeMutable(0),
+      velocityX: makeMutable((Math.random() - 0.5) * 10),
+      rotation: makeMutable(0),
     };
     setMarbles(prevMarbles => [...prevMarbles, newMarble]);
   };
@@ -136,7 +141,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
       {marbles.map((marble, index) => (
-        <Marble key={index} color={String(marble?.color) ?? "purple"} delay={Number(marble?.delay) ?? 0} />
+        <Marble key={index} {...marble} />
       ))}
     </View>
   );
