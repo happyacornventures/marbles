@@ -100,16 +100,6 @@ const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, ro
 export default function App() {
   const [marbles, setMarbles] = useState<Record<string, unknown>[]>([]);
 
-  const handleRedPress = () => {
-    console.log("Red marble pressed");
-    // Add your logic here
-  };
-
-  const handleGreenPress = () => {
-    console.log("Green marble pressed");
-    addNewMarble();
-  };
-
   const addNewMarble = () => {
     // const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
     // const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -123,6 +113,16 @@ export default function App() {
       rotation: makeMutable(0),
     };
     setMarbles(prevMarbles => [...prevMarbles, newMarble]);
+  };
+
+  const handleRedPress = () => {
+    console.log("Red marble pressed");
+    // Add your logic here
+  };
+
+  const handleGreenPress = () => {
+    console.log("Green marble pressed");
+    addNewMarble();
   };
 
   return (
