@@ -9,6 +9,8 @@ import Animated, {
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 
+import * as p2 from 'p2';
+
 const { width, height } = Dimensions.get('window');
 
 const MARBLE_SIZE = 40;
@@ -16,6 +18,15 @@ const GRAVITY = 0.5;
 const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
 const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
+
+const useMarblePhysics = (marbles: Record<string, unknown>[]) => {
+  useEffect(() => {
+    const world = new p2.World({
+      gravity: [0, -1000],
+    });
+  }, []);
+
+};
 
 const prepAnimate = (translateX: SharedValue<number>, translateY: SharedValue<number>, velocityX: SharedValue<number>, velocityY: SharedValue<number>, rotation: SharedValue<number>) => () => {
   velocityY.value += GRAVITY;
