@@ -24,6 +24,16 @@ const useMarblePhysics = (marbles: Record<string, unknown>[]) => {
     const world = new p2.World({
       gravity: [0, -1000],
     });
+
+      // Materials
+      const marbleMaterial = new p2.Material();
+      const surfaceMaterial = new p2.Material();
+
+      const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, {
+        restitution: 0.7,     // This controls bounce
+        friction: 0.3,
+      });
+      world.addContactMaterial(contactMaterial);
   }, []);
 
 };
