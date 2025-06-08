@@ -34,8 +34,37 @@ const useMarblePhysics = (marbles: Record<string, unknown>[]) => {
         friction: 0.3,
       });
       world.addContactMaterial(contactMaterial);
-  }, []);
 
+        // Floor
+        const groundBody = new p2.Body({
+          position: [width / 2, 10],
+        });
+        const groundShape = new p2.Box({ width: width, height: 20 });
+        groundShape.material = surfaceMaterial;
+        groundBody.addShape(groundShape);
+        groundBody.type = p2.Body.STATIC;
+        world.addBody(groundBody);
+
+        // Left wall
+        const leftWall = new p2.Body({
+          position: [10, height / 2],
+        });
+        const leftShape = new p2.Box({ width: 20, height: height });
+        leftShape.material = surfaceMaterial;
+        leftWall.addShape(leftShape);
+        leftWall.type = p2.Body.STATIC;
+        world.addBody(leftWall);
+
+        // Right wall
+        const rightWall = new p2.Body({
+          position: [width - 10, height / 2],
+        });
+        const rightShape = new p2.Box({ width: 20, height: height });
+        rightShape.material = surfaceMaterial;
+        rightWall.addShape(rightShape);
+        rightWall.type = p2.Body.STATIC;
+        world.addBody(rightWall);
+  }, []);
 };
 
 const prepAnimate = (translateX: SharedValue<number>, translateY: SharedValue<number>, velocityX: SharedValue<number>, velocityY: SharedValue<number>, rotation: SharedValue<number>) => () => {
