@@ -161,6 +161,12 @@ export default function App() {
       velocityY: makeMutable(0),
       velocityX: makeMutable((Math.random() - 0.5) * 10),
       rotation: makeMutable(0),
+      body: new p2.Body({
+                mass: 1,
+                position: [200 + 2 * (MARBLE_SIZE + 2), height - 50 - 1 * (MARBLE_SIZE + 2)],
+                damping: 0.2,
+                angularDamping: 0.2,
+            })
     };
     setMarbles(prevMarbles => [...prevMarbles, newMarble]);
   };
