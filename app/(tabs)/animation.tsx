@@ -19,53 +19,48 @@ const BOUNCE_FACTOR = 0.7;
 const FRICTION = 0.98;
 const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
 
-const useMarblePhysics = (marbles: Record<string, unknown>[]) => {
-  useEffect(() => {
-    const world = new p2.World({
-      gravity: [0, -1000],
-    });
+const world = new p2.World({
+  gravity: [0, -1000],
+});
 
-      // Materials
-      const marbleMaterial = new p2.Material();
-      const surfaceMaterial = new p2.Material();
+const marbleMaterial = new p2.Material();
+const surfaceMaterial = new p2.Material();
 
-      const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, {
-        restitution: 0.7,     // This controls bounce
-        friction: 0.3,
-      });
-      world.addContactMaterial(contactMaterial);
+const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, {
+  restitution: 0.7,     // This controls bounce
+  friction: 0.3,
+});
+world.addContactMaterial(contactMaterial);
 
-        // Floor
-        const groundBody = new p2.Body({
-          position: [width / 2, 10],
-        });
-        const groundShape = new p2.Box({ width: width, height: 20 });
-        groundShape.material = surfaceMaterial;
-        groundBody.addShape(groundShape);
-        groundBody.type = p2.Body.STATIC;
-        world.addBody(groundBody);
+  // Floor
+  const groundBody = new p2.Body({
+    position: [width / 2, 10],
+  });
+  const groundShape = new p2.Box({ width: width, height: 20 });
+  groundShape.material = surfaceMaterial;
+  groundBody.addShape(groundShape);
+  groundBody.type = p2.Body.STATIC;
+  world.addBody(groundBody);
 
-        // Left wall
-        const leftWall = new p2.Body({
-          position: [10, height / 2],
-        });
-        const leftShape = new p2.Box({ width: 20, height: height });
-        leftShape.material = surfaceMaterial;
-        leftWall.addShape(leftShape);
-        leftWall.type = p2.Body.STATIC;
-        world.addBody(leftWall);
+  // Left wall
+  const leftWall = new p2.Body({
+    position: [10, height / 2],
+  });
+  const leftShape = new p2.Box({ width: 20, height: height });
+  leftShape.material = surfaceMaterial;
+  leftWall.addShape(leftShape);
+  leftWall.type = p2.Body.STATIC;
+  world.addBody(leftWall);
 
-        // Right wall
-        const rightWall = new p2.Body({
-          position: [width - 10, height / 2],
-        });
-        const rightShape = new p2.Box({ width: 20, height: height });
-        rightShape.material = surfaceMaterial;
-        rightWall.addShape(rightShape);
-        rightWall.type = p2.Body.STATIC;
-        world.addBody(rightWall);
-  }, []);
-};
+  // Right wall
+  const rightWall = new p2.Body({
+    position: [width - 10, height / 2],
+  });
+  const rightShape = new p2.Box({ width: 20, height: height });
+  rightShape.material = surfaceMaterial;
+  rightWall.addShape(rightShape);
+  rightWall.type = p2.Body.STATIC;
+  world.addBody(rightWall);
 
 const prepAnimate = (translateX: SharedValue<number>, translateY: SharedValue<number>, velocityX: SharedValue<number>, velocityY: SharedValue<number>, rotation: SharedValue<number>) => () => {
   velocityY.value += GRAVITY;
