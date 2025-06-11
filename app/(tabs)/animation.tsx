@@ -163,6 +163,18 @@ export default function App() {
                 angularDamping: 0.2,
             })
     };
+
+    const shape = new p2.Circle({ radius: MARBLE_SIZE / 2 });
+    shape.material = marbleMaterial;
+
+    newMarble.body.addShape(shape);
+
+    newMarble.body.velocity = [Math.random() * 200 - 100, Math.random() * 200 - 100]; // Random initial velocity
+    newMarble.body.angularVelocity = Math.random() * 10 - 5; // Random rotation speed
+
+    world.addBody(newMarble.body);
+
+    // not even sure this is needed anymore
     setMarbles(prevMarbles => [...prevMarbles, newMarble]);
   };
 
