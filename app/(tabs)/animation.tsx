@@ -3,8 +3,10 @@ import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
+  useAnimatedProps,
   useAnimatedStyle,
-  useSharedValue
+  useSharedValue,
+  withTiming
 } from 'react-native-reanimated';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
@@ -151,6 +153,8 @@ export default function App() {
     const newMarble = {
       color: "purple",
       delay: 0,
+      x: makeMutable(0),
+      y: makeMutable(0),
       translateX: makeMutable(Math.random() * (width - MARBLE_SIZE)),
       translateY: makeMutable(-MARBLE_SIZE),
       velocityY: makeMutable(0),
