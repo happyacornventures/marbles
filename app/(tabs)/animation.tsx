@@ -36,9 +36,9 @@ world.addContactMaterial(contactMaterial);
 
   // Floor
   const groundBody = new p2.Body({
-    position: [width / 2, 10],
+    position: [width / 2, 60],
   });
-  const groundShape = new p2.Box({ width: width, height: 20 });
+  const groundShape = new p2.Box({ width: width, height: 60 });
   groundShape.material = surfaceMaterial;
   groundBody.addShape(groundShape);
   groundBody.type = p2.Body.STATIC;
