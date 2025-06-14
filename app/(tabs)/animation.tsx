@@ -46,7 +46,7 @@ world.addContactMaterial(contactMaterial);
 
   // Left wall
   const leftWall = new p2.Body({
-    position: [10, height / 2],
+    position: [-40, height / 2],
   });
   const leftShape = new p2.Box({ width: 20, height: height });
   leftShape.material = surfaceMaterial;
@@ -56,7 +56,7 @@ world.addContactMaterial(contactMaterial);
 
   // Right wall
   const rightWall = new p2.Body({
-    position: [width - 10, height / 2],
+    position: [width - 40, height / 2],
   });
   const rightShape = new p2.Box({ width: 20, height: height });
   rightShape.material = surfaceMaterial;
