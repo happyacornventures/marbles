@@ -150,19 +150,21 @@ export default function App() {
   const addNewMarble = () => {
     // const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
     // const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const randomX = Math.random() * (width - MARBLE_SIZE);
+    const randomVelocity = (Math.random() - 0.5) * 10;
     const newMarble = {
       color: "purple",
       delay: 0,
-      x: makeMutable(0),
-      y: makeMutable(0),
-      translateX: makeMutable(Math.random() * (width - MARBLE_SIZE)),
-      translateY: makeMutable(-MARBLE_SIZE),
+      x: makeMutable(randomX),
+      y: makeMutable(-MARBLE_SIZE * 4),
+      translateX: makeMutable(randomX),
+      translateY: makeMutable(-MARBLE_SIZE * 4),
       velocityY: makeMutable(0),
       velocityX: makeMutable((Math.random() - 0.5) * 10),
       rotation: makeMutable(0),
       body: new p2.Body({
                 mass: 1,
-                position: [200 + 2 * (MARBLE_SIZE + 2), height - 50 - 1 * (MARBLE_SIZE + 2)],
+                position: [randomX, height * 2],
                 damping: 0.2,
                 angularDamping: 0.2,
             })
@@ -173,7 +175,7 @@ export default function App() {
 
     newMarble.body.addShape(shape);
 
-    newMarble.body.velocity = [Math.random() * 200 - 100, Math.random() * 200 - 100]; // Random initial velocity
+    newMarble.body.velocity = [randomVelocity, 0]; // Random initial velocity
     newMarble.body.angularVelocity = Math.random() * 10 - 5; // Random rotation speed
 
     world.addBody(newMarble.body);
