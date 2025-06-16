@@ -145,7 +145,8 @@ const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, ro
 };
 
 export default function App() {
-  const [marbles, setMarbles] = useState<Record<string, unknown>[]>([]);
+  const [count, setCount] = useState(0);
+  const marbles = useSharedValue<Record<string, unknown>[]>([]);
 
   const addNewMarble = () => {
     // const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
@@ -181,7 +182,9 @@ export default function App() {
     world.addBody(newMarble.body);
 
     // not even sure this is needed anymore
-    setMarbles(prevMarbles => [...prevMarbles, newMarble]);
+    marbles.value.push(newMarble);
+    setCount(count + 1);
+    console.log(marbles.value.length, "marbles added");
   };
 
   const handleRedPress = () => {
@@ -209,7 +212,7 @@ export default function App() {
           <RoughMarble color={"purple"} />
         </TouchableOpacity>
       </View>
-      {marbles.map((marble, index) => (
+      {marbles.value.map((marble, index) => (
         <Marble key={index} {...marble} />
       ))}
     </View>
