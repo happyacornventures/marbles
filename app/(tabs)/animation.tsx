@@ -114,7 +114,7 @@ const useMarble = () => {
   return { translateX, translateY, velocityY, velocityX, rotation };
 };
 
-const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation }: Record<string, unknown>) => {
+const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation, x, y }: Record<string, unknown>) => {
 
   useEffect(() => {
     const animate = prepAnimate(translateX as Animated.SharedValue<number>, translateY as Animated.SharedValue<number>, velocityX as Animated.SharedValue<number>, velocityY as Animated.SharedValue<number>, rotation as Animated.SharedValue<number>);
@@ -131,8 +131,8 @@ const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, ro
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
-      { translateX: (translateX as SharedValue<number>).value },
-      { translateY: (translateY as SharedValue<number>).value },
+      { translateX: (x as SharedValue<number>).value },
+      { translateY: (y as SharedValue<number>).value },
       { rotate: `${(rotation as SharedValue<number>).value}deg` },
     ],
   }));
