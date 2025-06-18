@@ -104,30 +104,7 @@ const RoughMarble = ({ color }: { color: string }) => (
   </Svg>
 )
 
-const useMarble = () => {
-  const translateX = useSharedValue(Math.random() * (width - MARBLE_SIZE));
-  const translateY = useSharedValue(-MARBLE_SIZE);
-  const velocityY = useSharedValue(0);
-  const velocityX = useSharedValue((Math.random() - 0.5) * 10);
-  const rotation = useSharedValue(0);
-
-  return { translateX, translateY, velocityY, velocityX, rotation };
-};
-
 const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation, x, y }: Record<string, unknown>) => {
-
-  useEffect(() => {
-    const animate = prepAnimate(translateX as Animated.SharedValue<number>, translateY as Animated.SharedValue<number>, velocityX as Animated.SharedValue<number>, velocityY as Animated.SharedValue<number>, rotation as Animated.SharedValue<number>);
-
-    const animateLoop = () => {
-      animate();
-      requestAnimationFrame(animateLoop);
-    };
-
-    setTimeout(() => {
-      animateLoop();
-    }, Number(delay));
-  }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -196,6 +173,25 @@ export default function App() {
     console.log("Green marble pressed");
     addNewMarble();
   };
+
+  useEffect(() => {
+    const step = () => {
+      world.step(1 / 60);
+
+      marbles.value.forEach((marble, i) => {
+        (marbles.value[i].x as SharedValue<number>).value = withTiming((marble.body as any).position[0], { duration: 16 });
+        (marbles.value[i].y as SharedValue<number>).value = withTiming(height - (marble.body as any).position[1], { duration: 16 });
+      });
+
+      requestAnimationFrame(step);
+    };
+
+    const handler = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(handler);
+    };
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
