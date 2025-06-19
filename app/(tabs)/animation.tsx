@@ -110,7 +110,7 @@ const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, ro
     transform: [
       { translateX: (x as SharedValue<number>).value },
       { translateY: (y as SharedValue<number>).value },
-      { rotate: `${(rotation as SharedValue<number>).value}deg` },
+      { rotate: `${-(rotation as SharedValue<number>).value}rad` }, // Note: p2.js uses radians
     ],
   }));
 
@@ -181,6 +181,7 @@ export default function App() {
       marbles.value.forEach((marble, i) => {
         (marbles.value[i].x as SharedValue<number>).value = withTiming((marble.body as any).position[0], { duration: 16 });
         (marbles.value[i].y as SharedValue<number>).value = withTiming(height - (marble.body as any).position[1], { duration: 16 });
+        (marbles.value[i].rotation as SharedValue<number>).value = (marble.body as any).angle;
       });
 
       requestAnimationFrame(step);
