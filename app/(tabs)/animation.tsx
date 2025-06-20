@@ -104,6 +104,8 @@ const RoughMarble = ({ color }: { color: string }) => (
   </Svg>
 )
 
+const AnimatedRoughCircle = Animated.createAnimatedComponent(Rough.Circle);
+
 const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation, x, y }: Record<string, unknown>) => {
 
   const animatedStyle = useAnimatedStyle(() => ({
