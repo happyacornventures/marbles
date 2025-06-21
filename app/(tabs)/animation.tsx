@@ -140,7 +140,7 @@ export default function App() {
       translateX: makeMutable(randomX),
       translateY: makeMutable(-MARBLE_SIZE * 4),
       velocityY: makeMutable(0),
-      velocityX: makeMutable((Math.random() - 0.5) * 10),
+      velocityX: makeMutable(0),
       rotation: makeMutable(0),
       body: new p2.Body({
                 mass: 1,
