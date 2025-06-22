@@ -136,15 +136,15 @@ export default function App() {
       color: "purple",
       delay: 0,
       x: makeMutable(randomX),
-      y: makeMutable(-MARBLE_SIZE * 4),
+      y: makeMutable(-MARBLE_SIZE * 2),
       translateX: makeMutable(randomX),
-      translateY: makeMutable(-MARBLE_SIZE * 4),
+      translateY: makeMutable(-MARBLE_SIZE * 2),
       velocityY: makeMutable(0),
       velocityX: makeMutable(0),
       rotation: makeMutable(0),
       body: new p2.Body({
                 mass: 1,
-                position: [randomX, height * 2],
+                position: [randomX, height + (MARBLE_SIZE * 2)],
                 damping: 0.2,
                 angularDamping: 0.2,
             })
