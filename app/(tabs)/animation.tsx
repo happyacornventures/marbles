@@ -1,17 +1,15 @@
+import * as p2 from 'p2';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
-  useAnimatedProps,
   useAnimatedStyle,
   useSharedValue,
   withTiming
 } from 'react-native-reanimated';
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
-
-import * as p2 from 'p2';
 
 const { width, height } = Dimensions.get('window');
 
@@ -64,29 +62,6 @@ world.addContactMaterial(contactMaterial);
   rightWall.type = p2.Body.STATIC;
   world.addBody(rightWall);
 
-const prepAnimate = (translateX: SharedValue<number>, translateY: SharedValue<number>, velocityX: SharedValue<number>, velocityY: SharedValue<number>, rotation: SharedValue<number>) => () => {
-  velocityY.value += GRAVITY;
-  translateY.value += velocityY.value;
-  translateX.value += velocityX.value;
-  rotation.value += (velocityX.value * 3);
-
-  // Bottom collision
-  if (translateY.value > height - NAV_SIZE - MARBLE_SIZE) {
-    translateY.value = height - NAV_SIZE - MARBLE_SIZE;
-    velocityY.value *= -BOUNCE_FACTOR;
-    velocityX.value *= FRICTION;
-
-    // Update rotation when on the ground
-    // rotation.value += (velocityX.value * 3);
-  }
-
-  // Side collisions
-  if (translateX.value < 0 || translateX.value > width - MARBLE_SIZE) {
-    velocityX.value *= -BOUNCE_FACTOR;
-    translateX.value = Math.max(0, Math.min(translateX.value, width - MARBLE_SIZE));
-  }
-};
-
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
     pointerEvents="none"
@@ -103,8 +78,6 @@ const RoughMarble = ({ color }: { color: string }) => (
     />
   </Svg>
 )
-
-const AnimatedRoughCircle = Animated.createAnimatedComponent(Rough.Circle);
 
 const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation, x, y }: Record<string, unknown>) => {
 
