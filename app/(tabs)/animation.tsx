@@ -100,13 +100,13 @@ export default function App() {
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
 
-  const addNewMarble = () => {
-    // const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-    // const randomColor = colors[Math.floor(Math.random() * colors.length)];
+  const addNewMarble = (color: string) => {
+    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomX = Math.random() * (width - MARBLE_SIZE);
     const randomVelocity = (Math.random() - 0.5) * 10;
     const newMarble = {
-      color: "purple",
+      color,
       delay: 0,
       x: makeMutable(randomX),
       y: makeMutable(-MARBLE_SIZE * 2),
@@ -146,7 +146,7 @@ export default function App() {
 
   const handleGreenPress = () => {
     console.log("Green marble pressed");
-    addNewMarble();
+    addNewMarble("green");
   };
 
   useEffect(() => {
@@ -181,7 +181,7 @@ export default function App() {
         zIndex: 1,
       }}>
         <TouchableOpacity onPress={handleGreenPress}>
-          <RoughMarble color={"purple"} />
+          <RoughMarble color={"green"} />
         </TouchableOpacity>
       </View>
       {marbles.value.map((marble, index) => (
