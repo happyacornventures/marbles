@@ -141,7 +141,7 @@ export default function App() {
 
   const handleRedPress = () => {
     console.log("Red marble pressed");
-    // Add your logic here
+    addNewMarble("red");
   };
 
   const handleGreenPress = () => {
@@ -180,6 +180,9 @@ export default function App() {
         right: 0,
         zIndex: 1,
       }}>
+        <TouchableOpacity onPress={handleRedPress}>
+          <RoughMarble color={"red"} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={handleGreenPress}>
           <RoughMarble color={"green"} />
         </TouchableOpacity>
