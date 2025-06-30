@@ -13,6 +13,7 @@ import Svg from 'react-native-svg';
 
 const { width, height } = Dimensions.get('window');
 
+const MOVEMENT_THRESHOLD = 0.1; // Adjust this value as needed
 const MARBLE_SIZE = 40;
 const GRAVITY = 0.5;
 const BOUNCE_FACTOR = 0.7;
@@ -154,6 +155,15 @@ export default function App() {
       world.step(1 / 60);
 
       marbles.value.forEach((marble, i) => {
+        const velocityMagnitude = Math.sqrt((marble.body as any).velocity[0]**2 + (marble.body as any).velocity[1]**2);
+        const angularVelocityMagnitude = Math.abs((marble.body as any).angularVelocity);
+
+        if (velocityMagnitude < MOVEMENT_THRESHOLD && angularVelocityMagnitude < MOVEMENT_THRESHOLD) {
+          // If the marble is moving very slowly, consider it at rest
+          (marble.body as any).velocity = [0, 0];
+          (marble.body as any).angularVelocity = 0;
+        }
+
         (marbles.value[i].x as SharedValue<number>).value = withTiming((marble.body as any).position[0], { duration: 16 });
         (marbles.value[i].y as SharedValue<number>).value = withTiming(height - (marble.body as any).position[1], { duration: 16 });
         (marbles.value[i].rotation as SharedValue<number>).value = (marble.body as any).angle;
