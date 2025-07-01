@@ -15,10 +15,6 @@ const { width, height } = Dimensions.get('window');
 
 const MOVEMENT_THRESHOLD = 0.1; // Adjust this value as needed
 const MARBLE_SIZE = 40;
-const GRAVITY = 0.5;
-const BOUNCE_FACTOR = 0.7;
-const FRICTION = 0.98;
-const NAV_SIZE = 65; // Adjust this value based on your navigation bar height
 
 const world = new p2.World({
   gravity: [0, -1000],
@@ -80,7 +76,7 @@ const RoughMarble = ({ color }: { color: string }) => (
   </Svg>
 )
 
-const Marble = ({ color, delay, translateX, translateY, velocityY, velocityX, rotation, x, y }: Record<string, unknown>) => {
+const Marble = ({ color, rotation, x, y }: Record<string, unknown>) => {
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -102,19 +98,14 @@ export default function App() {
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
 
   const addNewMarble = (color: string) => {
-    const colors = ['red', 'blue', 'green', 'yellow', 'purple', 'orange'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const randomX = Math.random() * (width - MARBLE_SIZE);
     const randomVelocity = (Math.random() - 0.5) * 10;
+
     const newMarble = {
       color,
       delay: 0,
       x: makeMutable(randomX),
       y: makeMutable(-MARBLE_SIZE * 2),
-      translateX: makeMutable(randomX),
-      translateY: makeMutable(-MARBLE_SIZE * 2),
-      velocityY: makeMutable(0),
-      velocityX: makeMutable(0),
       rotation: makeMutable(0),
       body: new p2.Body({
                 mass: 1,
@@ -137,16 +128,13 @@ export default function App() {
     // not even sure this is needed anymore
     marbles.value.push(newMarble);
     setCount(count + 1);
-    console.log(marbles.value.length, "marbles added");
   };
 
   const handleRedPress = () => {
-    console.log("Red marble pressed");
     addNewMarble("red");
   };
 
   const handleGreenPress = () => {
-    console.log("Green marble pressed");
     addNewMarble("green");
   };
 
@@ -167,7 +155,6 @@ export default function App() {
         (marbles.value[i].x as SharedValue<number>).value = withTiming((marble.body as any).position[0], { duration: 16 });
         (marbles.value[i].y as SharedValue<number>).value = withTiming(height - (marble.body as any).position[1], { duration: 16 });
         (marbles.value[i].rotation as SharedValue<number>).value = (marble.body as any).angle;
-        console.log(marble);
       });
 
       requestAnimationFrame(step);
