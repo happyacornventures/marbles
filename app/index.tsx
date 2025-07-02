@@ -102,6 +102,7 @@ export default function App() {
     const randomVelocity = (Math.random() - 0.5) * 10;
 
     const newMarble = {
+      timestamp: Date.now(),
       color,
       delay: 0,
       x: makeMutable(randomX),
