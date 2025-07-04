@@ -11,6 +11,11 @@ import Animated, {
 import Rough from 'react-native-rough';
 import Svg from 'react-native-svg';
 
+import * as FileSystem from 'expo-file-system';
+
+const FILE_NAME = 'marbles.json';
+const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
+
 const { width, height } = Dimensions.get('window');
 
 const MOVEMENT_THRESHOLD = 0.1; // Adjust this value as needed
@@ -131,6 +136,20 @@ export default function App() {
     setCount(count + 1);
   };
 
+  const loadItems = async () => {
+    try {
+      console.log(`Loading marbles from ${FILE_URI}`);
+      const content = await FileSystem.readAsStringAsync(FILE_URI);
+      const parsed = JSON.parse(content);
+      marbles.value = (parsed.marbles || []);
+      setCount(parsed.marbles.length || 0);
+    } catch (err) {
+      // File might not exist yet
+      console.log('No saved data found, starting fresh.');
+      marbles.value = [];
+    }
+  }
+
   const handleRedPress = () => {
     addNewMarble("red");
   };
@@ -166,6 +185,10 @@ export default function App() {
     return () => {
       cancelAnimationFrame(handler);
     };
+  }, []);
+
+  useEffect(() => {
+    loadItems();
   }, []);
 
   return (
