@@ -34,35 +34,35 @@ const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, 
 });
 world.addContactMaterial(contactMaterial);
 
-  // Floor
-  const groundBody = new p2.Body({
-    position: [width / 2, 0],
-  });
-  const groundShape = new p2.Box({ width: width, height: 80 });
-  groundShape.material = surfaceMaterial;
-  groundBody.addShape(groundShape);
-  groundBody.type = p2.Body.STATIC;
-  world.addBody(groundBody);
+// Floor
+const groundBody = new p2.Body({
+  position: [width / 2, 0],
+});
+const groundShape = new p2.Box({ width: width, height: 80 });
+groundShape.material = surfaceMaterial;
+groundBody.addShape(groundShape);
+groundBody.type = p2.Body.STATIC;
+world.addBody(groundBody);
 
-  // Left wall
-  const leftWall = new p2.Body({
-    position: [-40, height / 2],
-  });
-  const leftShape = new p2.Box({ width: 20, height: height });
-  leftShape.material = surfaceMaterial;
-  leftWall.addShape(leftShape);
-  leftWall.type = p2.Body.STATIC;
-  world.addBody(leftWall);
+// Left wall
+const leftWall = new p2.Body({
+  position: [-40, height / 2],
+});
+const leftShape = new p2.Box({ width: 20, height: height });
+leftShape.material = surfaceMaterial;
+leftWall.addShape(leftShape);
+leftWall.type = p2.Body.STATIC;
+world.addBody(leftWall);
 
-  // Right wall
-  const rightWall = new p2.Body({
-    position: [width - 40, height / 2],
-  });
-  const rightShape = new p2.Box({ width: 20, height: height });
-  rightShape.material = surfaceMaterial;
-  rightWall.addShape(rightShape);
-  rightWall.type = p2.Body.STATIC;
-  world.addBody(rightWall);
+// Right wall
+const rightWall = new p2.Body({
+  position: [width - 40, height / 2],
+});
+const rightShape = new p2.Box({ width: 20, height: height });
+rightShape.material = surfaceMaterial;
+rightWall.addShape(rightShape);
+rightWall.type = p2.Body.STATIC;
+world.addBody(rightWall);
 
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
