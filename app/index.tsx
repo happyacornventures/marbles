@@ -133,14 +133,23 @@ export default function App() {
 
     // not even sure this is needed anymore
     marbles.value.push(newMarble);
+    saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
     setCount(count + 1);
   };
 
   const loadItems = async () => {
     try {
-      console.log(`Loading marbles from ${FILE_URI}`);
-      const content = await FileSystem.readAsStringAsync(FILE_URI);
-      const parsed = JSON.parse(content);
+      let parsed;
+      if(Platform.OS !== 'web') {
+        console.log(`Loading marbles from ${FILE_URI}`);
+        const content = await FileSystem.readAsStringAsync(FILE_URI);
+        parsed = JSON.parse(content);
+      } else {
+        const { readTextFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');
+        console.log(`loading marbles from ${BaseDirectory.AppData} ${FILE_NAME}`);
+        const text = await readTextFile(FILE_NAME, { baseDir: BaseDirectory.AppData });
+        parsed = JSON.parse(text);
+      }
       marbles.value = (parsed.marbles || []);
       setCount(parsed.marbles.length || 0);
     } catch (err) {
