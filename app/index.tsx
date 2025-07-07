@@ -102,12 +102,12 @@ export default function App() {
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
 
-  const addNewMarble = (color: string) => {
+  const addNewMarble = (color: string, timestamp?: number) => {
     const randomX = Math.random() * (width - MARBLE_SIZE);
     const randomVelocity = (Math.random() - 0.5) * 10;
 
     const newMarble = {
-      timestamp: Date.now(),
+      timestamp: timestamp || Date.now(),
       color,
       delay: 0,
       x: makeMutable(randomX),
@@ -150,12 +150,32 @@ export default function App() {
         const text = await readTextFile(FILE_NAME, { baseDir: BaseDirectory.AppData });
         parsed = JSON.parse(text);
       }
-      marbles.value = (parsed.marbles || []);
-      setCount(parsed.marbles.length || 0);
+      parsed.marbles.forEach((item: Record<string, unknown>) => addNewMarble(item.color as string, item.timestamp as number));
+      // setCount(parsed.marbles.length || 0);
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
       marbles.value = [];
+    }
+  }
+
+  const saveItems = async (content: unknown[]) => {
+    try {
+      if(Platform.OS!== 'web') {
+        console.log(`Saving marbles to ${FILE_URI}`);
+        await FileSystem.writeAsStringAsync(FILE_URI, JSON.stringify({ marbles: content }));
+      } else {
+        const { create, exists, mkdir, writeTextFile, BaseDirectory } = await import('@tauri-apps/plugin-fs');
+        if (!(await exists(FILE_NAME, { baseDir: BaseDirectory.AppData }))) {
+          console.log(`File ${FILE_NAME} does not exist, creating it.`);
+          await mkdir('', { baseDir: BaseDirectory.AppData, recursive: true });
+          await create(FILE_NAME, { baseDir: BaseDirectory.AppData });
+        }
+        console.log(`Saving marbles to ${BaseDirectory.AppData} ${FILE_NAME}`);
+        await writeTextFile(FILE_NAME, JSON.stringify({ marbles: content }), { baseDir: BaseDirectory.AppData });
+      }
+    } catch (err) {
+      console.error('Error saving data:', err);
     }
   }
 

@@ -1628,6 +1628,11 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
+"@tauri-apps/api@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-2.6.0.tgz#efd873bf04b0d72cea81f9397e16218f5deafe0f"
+  integrity sha512-hRNcdercfgpzgFrMXWwNDBN0B7vNzOzRepy6ZAmhxi5mDLVPNrTpo9MGg2tN/F7JRugj4d2aF7E1rtPXAHaetg==
+
 "@tauri-apps/cli-darwin-arm64@2.5.0":
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/@tauri-apps/cli-darwin-arm64/-/cli-darwin-arm64-2.5.0.tgz#930ce605d5624e6a11ed9f57f17c605a4443a3f5"
@@ -1699,6 +1704,13 @@
     "@tauri-apps/cli-win32-arm64-msvc" "2.5.0"
     "@tauri-apps/cli-win32-ia32-msvc" "2.5.0"
     "@tauri-apps/cli-win32-x64-msvc" "2.5.0"
+
+"@tauri-apps/plugin-fs@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/plugin-fs/-/plugin-fs-2.4.0.tgz#d76e4d1b3061508b21427394b9063e904897c87c"
+  integrity sha512-Sp8AdDcbyXyk6LD6Pmdx44SH3LPeNAvxR2TFfq/8CwqzfO1yOyV+RzT8fov0NNN7d9nvW7O7MtMAptJ42YXA5g==
+  dependencies:
+    "@tauri-apps/api" "^2.6.0"
 
 "@tybys/wasm-util@^0.9.0":
   version "0.9.0"

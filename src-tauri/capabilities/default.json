@@ -6,6 +6,27 @@
     "main"
   ],
   "permissions": [
-    "core:default"
+    "core:default",
+    "fs:default",
+    {
+      "identifier": "fs:allow-appdata-write",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**/*" }]
+    },
+    {
+      "identifier": "fs:allow-appdata-read",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**/*" }]
+    },
+    {
+      "identifier": "fs:allow-create",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**/*" }]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**/*" }]
+    },
+    {
+      "identifier": "fs:create-app-specific-dirs",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**/*" }]
+    }
   ]
 }
