@@ -64,6 +64,8 @@ rightWall.addShape(rightShape);
 rightWall.type = p2.Body.STATIC;
 world.addBody(rightWall);
 
+import { Platform } from 'react-native';
+
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
     pointerEvents="none"
@@ -102,7 +104,7 @@ export default function App() {
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
 
-  const addNewMarble = (color: string, timestamp?: number) => {
+  const addNewMarble = (color: string, timestamp?: number, heightModifier = 2) => {
     const randomX = Math.random() * (width - MARBLE_SIZE);
     const randomVelocity = (Math.random() - 0.5) * 10;
 
@@ -110,12 +112,12 @@ export default function App() {
       timestamp: timestamp || Date.now(),
       color,
       delay: 0,
-      x: makeMutable(randomX),
-      y: makeMutable(-MARBLE_SIZE * 2),
+      x: makeMutable(randomX), // width / 2
+      y: makeMutable(-MARBLE_SIZE * heightModifier),
       rotation: makeMutable(0),
       body: new p2.Body({
                 mass: 1,
-                position: [randomX, height + (MARBLE_SIZE * 2)],
+                position: [randomX, height + (MARBLE_SIZE * heightModifier)], // width / 2
                 damping: 0.2,
                 angularDamping: 0.2,
             })
@@ -150,7 +152,7 @@ export default function App() {
         const text = await readTextFile(FILE_NAME, { baseDir: BaseDirectory.AppData });
         parsed = JSON.parse(text);
       }
-      parsed.marbles.forEach((item: Record<string, unknown>) => addNewMarble(item.color as string, item.timestamp as number));
+      parsed.marbles.forEach((item: Record<string, unknown>, index: number) => addNewMarble(item.color as string, item.timestamp as number, index + 2));
       // setCount(parsed.marbles.length || 0);
     } catch (err) {
       // File might not exist yet
