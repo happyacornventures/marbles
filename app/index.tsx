@@ -135,8 +135,9 @@ export default function App() {
 
     // not even sure this is needed anymore
     marbles.value.push(newMarble);
-    saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
-    setCount(count + 1);
+    // saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
+    // setCount(count + 1);
+    return newMarble;
   };
 
   const loadItems = async () => {
@@ -153,7 +154,7 @@ export default function App() {
         parsed = JSON.parse(text);
       }
       parsed.marbles.forEach((item: Record<string, unknown>, index: number) => addNewMarble(item.color as string, item.timestamp as number, index + 2));
-      // setCount(parsed.marbles.length || 0);
+      setCount(parsed.marbles.length || 0);
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
@@ -183,10 +184,14 @@ export default function App() {
 
   const handleRedPress = () => {
     addNewMarble("red");
+    saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
+    setCount(count + 1);
   };
 
   const handleGreenPress = () => {
     addNewMarble("green");
+    saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
+    setCount(count + 1);
   };
 
   useEffect(() => {
