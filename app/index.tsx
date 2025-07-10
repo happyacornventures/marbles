@@ -103,8 +103,10 @@ const Marble = ({ color, rotation, x, y }: Record<string, unknown>) => {
 export default function App() {
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
+  const [lastDropDate, setLastDropDate] = useState<string | null>(null);
+  const [canDrop, setCanDrop] = useState(false);
 
-  const addNewMarble = (color: string, timestamp?: number, heightModifier = 2) => {
+  const addNewMarble = (color: string, timestamp?: number, heightModifier = 2): Record<string, unknown> => {
     const randomX = Math.random() * (width - MARBLE_SIZE);
     const randomVelocity = (Math.random() - 0.5) * 10;
 
@@ -155,10 +157,21 @@ export default function App() {
       }
       parsed.marbles.forEach((item: Record<string, unknown>, index: number) => addNewMarble(item.color as string, item.timestamp as number, index + 2));
       setCount(parsed.marbles.length || 0);
+
+      // Update lastDropDate based on the most recent marble
+      if (parsed.marbles.length > 0) {
+        const mostRecentMarble = parsed.marbles.reduce((latest: any, current: any) =>
+          latest.timestamp > current.timestamp ? latest : current
+        );
+        setLastDropDate(new Date(mostRecentMarble.timestamp).toDateString());
+      }
+
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
       marbles.value = [];
+      // set last drop date to 1970-01-01
+      setLastDropDate(new Date(0).toDateString());
     }
   }
 
@@ -182,16 +195,30 @@ export default function App() {
     }
   }
 
+  const canDropMarble = () => {
+    if (!lastDropDate) return false;
+    const now = new Date();
+    const currentDate = now.toDateString();
+    const currentHour = now.getHours();
+    // drop after 5 PM
+    const dropTime = 17; // Set this to 6 for 6 AM, or 7 for 7 AM
+
+    // Allow dropping if it's a new day and after the drop time
+    return lastDropDate !== currentDate && currentHour >= dropTime;
+  };
+
   const handleRedPress = () => {
-    addNewMarble("red");
+    const newMarble = addNewMarble("red");
     saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
     setCount(count + 1);
+    setLastDropDate(new Date().toDateString());
   };
 
   const handleGreenPress = () => {
-    addNewMarble("green");
+    const newMarble = addNewMarble("green");
     saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
     setCount(count + 1);
+    setLastDropDate(new Date().toDateString());
   };
 
   useEffect(() => {
@@ -227,9 +254,13 @@ export default function App() {
     loadItems();
   }, []);
 
+    useEffect(() => {
+      setCanDrop(canDropMarble());
+  }, [lastDropDate]);
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={{
+      {canDrop && (<View style={{
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center',
@@ -244,7 +275,7 @@ export default function App() {
         <TouchableOpacity onPress={handleGreenPress}>
           <RoughMarble color={"green"} />
         </TouchableOpacity>
-      </View>
+      </View>)}
       {marbles.value.map((marble, index) => (
         <Marble key={index} {...marble} />
       ))}
