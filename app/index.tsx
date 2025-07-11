@@ -1,6 +1,6 @@
 import * as p2 from 'p2';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
@@ -105,6 +105,7 @@ export default function App() {
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
   const [lastDropDate, setLastDropDate] = useState<string | null>(null);
   const [canDrop, setCanDrop] = useState(false);
+  const [percentGood, setPercentGood] = useState(100);
 
   const addNewMarble = (color: string, timestamp?: number, heightModifier = 2): Record<string, unknown> => {
     const randomX = Math.random() * (width - MARBLE_SIZE);
@@ -140,6 +141,13 @@ export default function App() {
     // saveItems(marbles.value.map(({timestamp, color, }) => ({ timestamp, color })));
     // setCount(count + 1);
     return newMarble;
+  };
+
+  const updatePercentGood = () => {
+    const totalMarbles = marbles.value.length;
+    const goodMarbles = marbles.value.filter((marble) => marble.color === "green").length;
+    if (totalMarbles === 0) return 100; // Avoid division by zero
+    setPercentGood(Math.round((goodMarbles / totalMarbles) * 100));
   };
 
   const loadItems = async () => {
@@ -254,12 +262,14 @@ export default function App() {
     loadItems();
   }, []);
 
-    useEffect(() => {
+  useEffect(() => {
+      updatePercentGood();
       setCanDrop(canDropMarble());
   }, [lastDropDate]);
 
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View><Text>Percent Good: {percentGood}%</Text></View>
       {canDrop && (<View style={{
         flexDirection: 'row',
         justifyContent: 'flex-end',
