@@ -174,6 +174,15 @@ export default function App() {
         setLastDropDate(new Date(mostRecentMarble.timestamp).toDateString());
       }
 
+      console.log(parsed.marbles.length, 'marbles loaded');
+      const marbleValues = parsed.marbles.map((item: Record<string, unknown>) => item.color === "green" ? 1 : 0);
+      const dailyAverage = marbleValues.map((value: number, index: number, arr: number[]) => {
+        console.log('Calculating daily average for index:', index, 'value:', value);
+        return marbleValues.slice(Math.max(0, index - 6), index + 1)
+                           .reduce((acc: number, val: number) => acc + val, 0) / Math.min(7, index + 1);
+      });
+      console.log('Daily average:', dailyAverage);
+
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
