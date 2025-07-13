@@ -183,6 +183,23 @@ export default function App() {
       });
       console.log('Daily average:', dailyAverage);
 
+      // caculate exponential moving average
+      const alpha = 0.1; // Smoothing factor
+      // const ema = dailyAverage.reduce((acc: number[], value: number, index: number) => {
+      const ema = marbleValues.reduce((acc: number[], value: number, index: number) => {
+        if (index === 0) {
+          acc.push(value); // First value is the same
+        } else {
+          const prevEma = acc[index - 1];
+          const newEma = (value * alpha) + (prevEma * (1 - alpha));
+          acc.push(newEma);
+        }
+        return acc;
+      }, []);
+
+      // console.log('Exponential Moving Average:', ema);
+      console.log('Exponential Moving Average:', ema.map((value: number) => Math.round(value * 100) / 100));
+
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
