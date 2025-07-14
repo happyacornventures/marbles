@@ -144,10 +144,37 @@ export default function App() {
   };
 
   const updatePercentGood = () => {
-    const totalMarbles = marbles.value.length;
-    const goodMarbles = marbles.value.filter((marble) => marble.color === "green").length;
-    if (totalMarbles === 0) return 100; // Avoid division by zero
-    setPercentGood(Math.round((goodMarbles / totalMarbles) * 100));
+      const marbleValues = marbles.value.map((item: Record<string, unknown>) => item.color === "green" ? 1 : 0);
+      const dailyAverage = marbleValues.map((value: number, index: number, arr: number[]) => {
+        console.log('Calculating daily average for index:', index, 'value:', value);
+        return marbleValues.slice(Math.max(0, index - 6), index + 1)
+                           .reduce((acc: number, val: number) => acc + val, 0) / Math.min(7, index + 1);
+      });
+      console.log('Daily average:', dailyAverage);
+
+      // caculate exponential moving average
+      const alpha = 0.1; // Smoothing factor
+      // const ema = dailyAverage.reduce((acc: number[], value: number, index: number) => {
+      const ema = marbleValues.reduce((acc: number[], value: number, index: number) => {
+        if (index === 0) {
+          acc.push(value); // First value is the same
+        } else {
+          const prevEma = acc[index - 1];
+          const newEma = (value * alpha) + (prevEma * (1 - alpha));
+          acc.push(newEma);
+        }
+        return acc;
+      }, []);
+
+      // console.log('Exponential Moving Average:', ema);
+      console.log('Exponential Moving Average:', ema.map((value: number) => Math.round(value * 100) / 100));
+      setPercentGood(Math.round(ema[ema.length - 1] * 100));
+
+    // basic % of all marbles
+    // const totalMarbles = marbles.value.length;
+    // const goodMarbles = marbles.value.filter((marble) => marble.color === "green").length;
+    // if (totalMarbles === 0) return 100; // Avoid division by zero
+    // setPercentGood(Math.round((goodMarbles / totalMarbles) * 100));
   };
 
   const loadItems = async () => {
@@ -175,31 +202,6 @@ export default function App() {
       }
 
       console.log(parsed.marbles.length, 'marbles loaded');
-      const marbleValues = parsed.marbles.map((item: Record<string, unknown>) => item.color === "green" ? 1 : 0);
-      const dailyAverage = marbleValues.map((value: number, index: number, arr: number[]) => {
-        console.log('Calculating daily average for index:', index, 'value:', value);
-        return marbleValues.slice(Math.max(0, index - 6), index + 1)
-                           .reduce((acc: number, val: number) => acc + val, 0) / Math.min(7, index + 1);
-      });
-      console.log('Daily average:', dailyAverage);
-
-      // caculate exponential moving average
-      const alpha = 0.1; // Smoothing factor
-      // const ema = dailyAverage.reduce((acc: number[], value: number, index: number) => {
-      const ema = marbleValues.reduce((acc: number[], value: number, index: number) => {
-        if (index === 0) {
-          acc.push(value); // First value is the same
-        } else {
-          const prevEma = acc[index - 1];
-          const newEma = (value * alpha) + (prevEma * (1 - alpha));
-          acc.push(newEma);
-        }
-        return acc;
-      }, []);
-
-      // console.log('Exponential Moving Average:', ema);
-      console.log('Exponential Moving Average:', ema.map((value: number) => Math.round(value * 100) / 100));
-
     } catch (err) {
       // File might not exist yet
       console.log('No saved data found, starting fresh.');
