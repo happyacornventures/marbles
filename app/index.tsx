@@ -13,6 +13,8 @@ import Svg from 'react-native-svg';
 
 import * as FileSystem from 'expo-file-system';
 
+import { useFonts, WaitingfortheSunrise_400Regular } from '@expo-google-fonts/waiting-for-the-sunrise';
+
 const FILE_NAME = 'marbles.json';
 const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
 
@@ -106,6 +108,10 @@ export default function App() {
   const [lastDropDate, setLastDropDate] = useState<string | null>(null);
   const [canDrop, setCanDrop] = useState(false);
   const [percentGood, setPercentGood] = useState(100);
+
+  let [fontsLoaded] = useFonts({
+    WaitingfortheSunrise_400Regular,
+  });
 
   const addNewMarble = (color: string, timestamp?: number, heightModifier = 2): Record<string, unknown> => {
     const randomX = Math.random() * (width - MARBLE_SIZE);
@@ -295,9 +301,13 @@ export default function App() {
       setCanDrop(canDropMarble());
   }, [lastDropDate]);
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View><Text>Percent Good: {percentGood}%</Text></View>
+      <View style={{ marginLeft: 16}}><Text style={{ fontFamily: 'WaitingfortheSunrise_400Regular', fontSize: 30 }}>{percentGood}% good</Text></View>
       {canDrop && (<View style={{
         flexDirection: 'row',
         justifyContent: 'flex-end',

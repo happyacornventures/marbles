@@ -866,6 +866,11 @@
     "@eslint/core" "^0.13.0"
     levn "^0.4.1"
 
+"@expo-google-fonts/waiting-for-the-sunrise@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/waiting-for-the-sunrise/-/waiting-for-the-sunrise-0.4.0.tgz#8fb7f1288f89940c2659de5250c7b0e7d9ad5b77"
+  integrity sha512-wY4nJ+BqgCQtc3lGzUTLj5X4W0NbuKR4q1jJ0918YVSJw3pZ683QXx2vzm5yLrNV67cJOcn3pis3gB7OukSj7g==
+
 "@expo/cli@0.24.13":
   version "0.24.13"
   resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.24.13.tgz#0066e038982b7143f966d688e76e02d935f0dc8b"
@@ -3538,6 +3543,13 @@ expo-font@~13.3.1:
   version "13.3.1"
   resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-13.3.1.tgz#ed69ae14f263a4c447efb2615b60d9e045372e68"
   integrity sha512-d+xrHYvSM9WB42wj8vP9OOFWyxed5R1evphfDb6zYBmC1dA9Hf89FpT7TNFtj2Bk3clTnpmVqQTCYbbA2P3CLg==
+  dependencies:
+    fontfaceobserver "^2.1.0"
+
+expo-font@~13.3.2:
+  version "13.3.2"
+  resolved "https://registry.yarnpkg.com/expo-font/-/expo-font-13.3.2.tgz#1b5a1a14d6827a48a3f003577d5f7dc6b344a1d3"
+  integrity sha512-wUlMdpqURmQ/CNKK/+BIHkDA5nGjMqNlYmW0pJFXY/KE/OG80Qcavdu2sHsL4efAIiNGvYdBS10WztuQYU4X0A==
   dependencies:
     fontfaceobserver "^2.1.0"
 
