@@ -20,7 +20,7 @@ const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
 
 const { width, height } = Dimensions.get('window');
 
-const MOVEMENT_THRESHOLD = 0.1; // Adjust this value as needed
+const MOVEMENT_THRESHOLD = 1.5; // Adjust this value as needed
 const MARBLE_SIZE = 40;
 
 const world = new p2.World({
@@ -40,7 +40,7 @@ world.addContactMaterial(contactMaterial);
 const groundBody = new p2.Body({
   position: [width / 2, 0],
 });
-const groundShape = new p2.Box({ width: width, height: 80 });
+const groundShape = new p2.Box({ width: width * 2, height: 80 });
 groundShape.material = surfaceMaterial;
 groundBody.addShape(groundShape);
 groundBody.type = p2.Body.STATIC;
@@ -48,9 +48,9 @@ world.addBody(groundBody);
 
 // Left wall
 const leftWall = new p2.Body({
-  position: [-40, height / 2],
+  position: [-50, height / 2],
 });
-const leftShape = new p2.Box({ width: 20, height: height });
+const leftShape = new p2.Box({ width: 20, height: height * 10 });
 leftShape.material = surfaceMaterial;
 leftWall.addShape(leftShape);
 leftWall.type = p2.Body.STATIC;
@@ -58,9 +58,9 @@ world.addBody(leftWall);
 
 // Right wall
 const rightWall = new p2.Body({
-  position: [width - 40, height / 2],
+  position: [width - 30, height / 2],
 });
-const rightShape = new p2.Box({ width: 20, height: height });
+const rightShape = new p2.Box({ width: 20, height: height * 10 });
 rightShape.material = surfaceMaterial;
 rightWall.addShape(rightShape);
 rightWall.type = p2.Body.STATIC;
