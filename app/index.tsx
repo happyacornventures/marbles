@@ -114,7 +114,7 @@ export default function App() {
   });
 
   const addNewMarble = (color: string, timestamp?: number, heightModifier = 2): Record<string, unknown> => {
-    const randomX = Math.random() * (width - MARBLE_SIZE);
+    const randomX = Math.random() * (width - (MARBLE_SIZE * 4)) + (MARBLE_SIZE * 2);
     const randomVelocity = (Math.random() - 0.5) * 10;
 
     const newMarble = {
