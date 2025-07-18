@@ -1,6 +1,6 @@
 import * as p2 from 'p2';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
@@ -65,8 +65,6 @@ rightShape.material = surfaceMaterial;
 rightWall.addShape(rightShape);
 rightWall.type = p2.Body.STATIC;
 world.addBody(rightWall);
-
-import { Platform } from 'react-native';
 
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
@@ -294,6 +292,17 @@ export default function App() {
 
   useEffect(() => {
     loadItems();
+  }, []);
+
+  useEffect(() => {
+    // on window resize, refresh the page
+    const handleResize = () => {
+      window.location.reload();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   useEffect(() => {
