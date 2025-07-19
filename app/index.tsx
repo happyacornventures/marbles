@@ -148,6 +148,7 @@ export default function App() {
   };
 
   const updatePercentGood = () => {
+      if(!marbles.value || marbles.value.length === 0) return;
       const marbleValues = marbles.value.map((item: Record<string, unknown>) => item.color === "green" ? 1 : 0);
       const dailyAverage = marbleValues.map((value: number, index: number, arr: number[]) => {
         console.log('Calculating daily average for index:', index, 'value:', value);
