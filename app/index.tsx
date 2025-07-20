@@ -1,6 +1,6 @@
 import * as p2 from 'p2';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
@@ -14,6 +14,46 @@ import Svg from 'react-native-svg';
 import * as FileSystem from 'expo-file-system';
 
 import { useFonts, WaitingfortheSunrise_400Regular } from '@expo-google-fonts/waiting-for-the-sunrise';
+
+
+const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  contentContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  marbleExplanation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  explanationText: {
+    marginRight: 10,
+    fontSize: 18,
+    fontFamily: 'WaitingfortheSunrise_400Regular',
+  },
+  closeButton: {
+    backgroundColor: '#4a90e2',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+});
 
 const FILE_NAME = 'marbles.json';
 const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
@@ -100,12 +140,31 @@ const Marble = ({ color, rotation, x, y }: Record<string, unknown>) => {
   );
 };
 
+const OnboardingOverlay = ({ onClose }: { onClose: () => void }) => (
+  <View style={styles.overlay}>
+    <View style={styles.contentContainer}>
+      <View style={styles.marbleExplanation}>
+        <Text style={styles.explanationText}>Good day</Text>
+        <RoughMarble color="green" />
+      </View>
+      <View style={styles.marbleExplanation}>
+        <Text style={styles.explanationText}>Bad day</Text>
+        <RoughMarble color="red" />
+      </View>
+      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+        <Text style={styles.closeButtonText}>Got it!</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+);
+
 export default function App() {
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
   const [lastDropDate, setLastDropDate] = useState<string | null>(null);
   const [canDrop, setCanDrop] = useState(false);
   const [percentGood, setPercentGood] = useState(100);
+  const [isFirstTime, setIsFirstTime] = useState(true);
 
   let [fontsLoaded] = useFonts({
     WaitingfortheSunrise_400Regular,
@@ -337,6 +396,7 @@ export default function App() {
       {marbles.value.map((marble, index) => (
         <Marble key={index} {...marble} />
       ))}
+      {isFirstTime && <OnboardingOverlay onClose={() => setIsFirstTime(false)} />}
     </View>
   );
 }
