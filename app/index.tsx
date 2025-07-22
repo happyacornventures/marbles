@@ -355,6 +355,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    if(Platform.OS !== 'web') return;
     // on window resize, refresh the page
     const handleResize = () => {
       window.location.reload();
