@@ -1,6 +1,6 @@
 import * as p2 from 'p2';
 import React, { useEffect, useState } from 'react';
-import { Dimensions, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import Animated, {
   makeMutable,
   SharedValue,
@@ -14,7 +14,6 @@ import Svg from 'react-native-svg';
 import * as FileSystem from 'expo-file-system';
 
 import { useFonts, WaitingfortheSunrise_400Regular } from '@expo-google-fonts/waiting-for-the-sunrise';
-
 
 const styles = StyleSheet.create({
   overlay: {
@@ -58,8 +57,6 @@ const styles = StyleSheet.create({
 const FILE_NAME = 'marbles.json';
 const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
 
-const { width, height } = Dimensions.get('window');
-
 const MOVEMENT_THRESHOLD = 1.5; // Adjust this value as needed
 const MARBLE_SIZE = 40;
 
@@ -75,36 +72,6 @@ const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, 
   friction: 0.3,
 });
 world.addContactMaterial(contactMaterial);
-
-// Floor
-const groundBody = new p2.Body({
-  position: [width / 2, 0],
-});
-const groundShape = new p2.Box({ width: width * 2, height: 80 });
-groundShape.material = surfaceMaterial;
-groundBody.addShape(groundShape);
-groundBody.type = p2.Body.STATIC;
-world.addBody(groundBody);
-
-// Left wall
-const leftWall = new p2.Body({
-  position: [-50, height / 2],
-});
-const leftShape = new p2.Box({ width: 20, height: height * 10 });
-leftShape.material = surfaceMaterial;
-leftWall.addShape(leftShape);
-leftWall.type = p2.Body.STATIC;
-world.addBody(leftWall);
-
-// Right wall
-const rightWall = new p2.Body({
-  position: [width - 30, height / 2],
-});
-const rightShape = new p2.Box({ width: 20, height: height * 10 });
-rightShape.material = surfaceMaterial;
-rightWall.addShape(rightShape);
-rightWall.type = p2.Body.STATIC;
-world.addBody(rightWall);
 
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
@@ -159,12 +126,43 @@ const OnboardingOverlay = ({ onClose }: { onClose: () => void }) => (
 );
 
 export default function App() {
+  const { width, height } = useWindowDimensions();
   const [count, setCount] = useState(0);
   const marbles = useSharedValue<Record<string, unknown>[]>([]);
   const [lastDropDate, setLastDropDate] = useState<string | null>(null);
   const [canDrop, setCanDrop] = useState(false);
   const [percentGood, setPercentGood] = useState(100);
   const [isFirstTime, setIsFirstTime] = useState(true);
+
+  // Floor
+  const groundBody = new p2.Body({
+    position: [width / 2, 0],
+  });
+  const groundShape = new p2.Box({ width: width * 2, height: 80 });
+  groundShape.material = surfaceMaterial;
+  groundBody.addShape(groundShape);
+  groundBody.type = p2.Body.STATIC;
+  world.addBody(groundBody);
+
+  // Left wall
+  const leftWall = new p2.Body({
+    position: [-50, height / 2],
+  });
+  const leftShape = new p2.Box({ width: 20, height: height * 10 });
+  leftShape.material = surfaceMaterial;
+  leftWall.addShape(leftShape);
+  leftWall.type = p2.Body.STATIC;
+  world.addBody(leftWall);
+
+  // Right wall
+  const rightWall = new p2.Body({
+    position: [width - 30, height / 2],
+  });
+  const rightShape = new p2.Box({ width: 20, height: height * 10 });
+  rightShape.material = surfaceMaterial;
+  rightWall.addShape(rightShape);
+  rightWall.type = p2.Body.STATIC;
+  world.addBody(rightWall);
 
   let [fontsLoaded] = useFonts({
     WaitingfortheSunrise_400Regular,
