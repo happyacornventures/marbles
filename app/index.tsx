@@ -60,19 +60,6 @@ const FILE_URI = FileSystem.documentDirectory + FILE_NAME;
 const MOVEMENT_THRESHOLD = 1.5; // Adjust this value as needed
 const MARBLE_SIZE = 40;
 
-const world = new p2.World({
-  gravity: [0, -1000],
-});
-
-const marbleMaterial = new p2.Material();
-const surfaceMaterial = new p2.Material();
-
-const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, {
-  restitution: 0.7,     // This controls bounce
-  friction: 0.3,
-});
-world.addContactMaterial(contactMaterial);
-
 const RoughMarble = ({ color }: { color: string }) => (
   <Svg
     pointerEvents="none"
@@ -133,6 +120,19 @@ export default function App() {
   const [canDrop, setCanDrop] = useState(false);
   const [percentGood, setPercentGood] = useState(100);
   const [isFirstTime, setIsFirstTime] = useState(true);
+
+  const world = new p2.World({
+    gravity: [0, -1000],
+  });
+
+  const marbleMaterial = new p2.Material();
+  const surfaceMaterial = new p2.Material();
+
+  const contactMaterial = new p2.ContactMaterial(marbleMaterial, surfaceMaterial, {
+    restitution: 0.7,     // This controls bounce
+    friction: 0.3,
+  });
+  world.addContactMaterial(contactMaterial);
 
   // Floor
   const groundBody = new p2.Body({
